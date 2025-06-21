@@ -87,15 +87,15 @@ export default function HomePage() {
   };
 
   const fetchStats = async () => {
-    try {
-      const response = await fetch("/api/stats");
-      const data = await response.json();
-      if (response.ok) {
-        setStats(data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch stats:", error);
-    }
+    // try {
+    //   const response = await fetch("/api/stats");
+    //   const data = await response.json();
+    //   if (response.ok) {
+    //     setStats(data);
+    //   }
+    // } catch (error) {
+    //   console.error("Failed to fetch stats:", error);
+    // }
   };
 
   if (isLoading) {
@@ -114,17 +114,13 @@ export default function HomePage() {
       <CursorFollower />
       <Navbar />
 
-      {/* Hero Section with Animated Gradient */}
       <section className="relative overflow-hidden py-20 lg:py-32 mb-8">
-        {/* Animated Background Gradient */}
         <div className="absolute inset-0 animate-gradient-move" />
 
-        {/* Additional animated overlay for more depth */}
         <div className="absolute inset-0 opacity-50">
           <div className="absolute inset-0 animate-gradient" />
         </div>
 
-        {/* Subtle pattern overlay */}
         <div className="absolute inset-0 opacity-30">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:20px_20px]" />
         </div>
@@ -205,7 +201,6 @@ export default function HomePage() {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 pb-20">
-        {/* Featured Memes */}
         {featuredMemes.length > 0 && (
           <section>
             <div className="flex items-center justify-between my-8">
@@ -235,7 +230,6 @@ export default function HomePage() {
           </section>
         )}
 
-        {/* Trending Memes */}
         {trendingMemes.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-8">
@@ -265,7 +259,6 @@ export default function HomePage() {
           </section>
         )}
 
-        {/* Latest Memes */}
         {latestMemes.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-8">
@@ -295,7 +288,6 @@ export default function HomePage() {
           </section>
         )}
 
-        {/* CTA Section */}
         {!user && (
           <section className="text-center py-16">
             <Card className="glass-card max-w-2xl mx-auto hover:scale-105 transition-transform">

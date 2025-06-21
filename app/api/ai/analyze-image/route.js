@@ -14,7 +14,6 @@ export async function POST(req) {
       return NextResponse.json({ error: "No image provided" }, { status: 400 });
     }
 
-    // Convert file to base64
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const base64 = buffer.toString("base64");
@@ -52,10 +51,8 @@ export async function POST(req) {
     const response = await result.response;
     const text = response.text();
 
-    // Try to parse JSON from the response
     let aiSuggestions;
     try {
-      // Extract JSON from the response (in case there's extra text)
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         aiSuggestions = JSON.parse(jsonMatch[0]);
@@ -63,7 +60,6 @@ export async function POST(req) {
         throw new Error("No JSON found in response");
       }
     } catch (parseError) {
-      // Fallback if JSON parsing fails
       aiSuggestions = {
         titles: [
           "When AI Can't Parse But Still Delivers",

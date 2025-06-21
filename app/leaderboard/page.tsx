@@ -178,7 +178,6 @@ export default function LeaderboardPage() {
                   );
                 })}
 
-                {/* Rest of the leaderboard */}
                 {leaderboard.slice(3).map((user, index) => {
                   const rank = index + 4;
                   return (

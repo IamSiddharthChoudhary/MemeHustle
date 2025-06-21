@@ -8,8 +8,7 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get("limit") || "10");
-    const type = searchParams.get("type") || "earned"; // 'earned' or 'balance'
-
+    const type = searchParams.get("type") || "earned";
     await client.connect();
     const db = client.db("meme-marketplace");
     const users = db.collection("users");

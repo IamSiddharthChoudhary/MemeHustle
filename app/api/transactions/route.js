@@ -121,7 +121,6 @@ export async function POST(req) {
     session = client.startSession();
 
     const result = await session.withTransaction(async () => {
-      // Fetch meme and buyer with fresh data
       const meme = await memes.findOne({ _id: memeObjectId }, { session });
       const buyer = await users.findOne({ _id: buyerObjectId }, { session });
 
@@ -148,7 +147,6 @@ export async function POST(req) {
         throw new Error("You cannot buy your own meme");
       }
 
-      // Check if exclusive meme is already owned by someone else
       if (
         meme.isExclusive &&
         meme.currentOwner &&
@@ -157,13 +155,11 @@ export async function POST(req) {
         throw new Error("This exclusive meme is already owned by someone else");
       }
 
-      // Get seller info
       const seller = await users.findOne({ _id: creatorObjectId }, { session });
       if (!seller) {
         throw new Error("Seller not found");
       }
 
-      // Create transaction record
       const transactionDoc = {
         buyer: buyerObjectId,
         seller: creatorObjectId,
@@ -178,7 +174,6 @@ export async function POST(req) {
 
       await transactions.insertOne(transactionDoc, { session });
 
-      // Update buyer: deduct coins and increase totalSpent
       const buyerUpdateResult = await users.updateOne(
         { _id: buyerObjectId },
         {
@@ -193,7 +188,6 @@ export async function POST(req) {
         { session }
       );
 
-      // Update seller: add coins and increase totalEarned
       const sellerUpdateResult = await users.updateOne(
         { _id: creatorObjectId },
         {
@@ -208,7 +202,6 @@ export async function POST(req) {
         { session }
       );
 
-      // Update meme
       const memeUpdateData = {
         $inc: {
           downloads: 1,
@@ -219,7 +212,6 @@ export async function POST(req) {
       };
 
       if (meme.isExclusive) {
-        // For exclusive memes, transfer ownership and remove from sale
         memeUpdateData.$set.currentOwner = buyerObjectId;
         memeUpdateData.$set.isForSale = false;
       }
@@ -230,7 +222,6 @@ export async function POST(req) {
         { session }
       );
 
-      // Verify all updates were successful
       if (buyerUpdateResult.modifiedCount === 0) {
         throw new Error("Failed to update buyer balance");
       }
@@ -241,7 +232,6 @@ export async function POST(req) {
         throw new Error("Failed to update meme");
       }
 
-      // Get updated user data
       const updatedBuyer = await users.findOne(
         { _id: buyerObjectId },
         { session }

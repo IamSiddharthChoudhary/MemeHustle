@@ -54,7 +54,6 @@ export default function EnhancedCursorFollower() {
     return () => cancelAnimationFrame(animationFrame);
   }, [mousePosition, followerPosition]);
 
-  // Auto-rotate emoji every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentEmoji((prev) => (prev + 1) % emojis.length);
@@ -75,7 +74,6 @@ export default function EnhancedCursorFollower() {
       }}
     >
       <div className="relative">
-        {/* Main emoji with click effect */}
         <div
           className={`text-3xl select-none transition-transform duration-200 ${
             isClicking ? "animate-ping scale-125" : "animate-bounce-gentle"
@@ -84,7 +82,6 @@ export default function EnhancedCursorFollower() {
           {emojis[currentEmoji]}
         </div>
 
-        {/* Sparkle effects */}
         <div className="absolute -top-2 -right-2 text-xs animate-float-sparkle">
           ✨
         </div>
@@ -95,7 +92,6 @@ export default function EnhancedCursorFollower() {
           ⭐
         </div>
 
-        {/* Trailing effect */}
         <div
           className="absolute inset-0 text-3xl animate-pulse opacity-20 select-none blur-sm"
           style={{ animationDelay: "0.15s" }}
@@ -103,7 +99,6 @@ export default function EnhancedCursorFollower() {
           {emojis[currentEmoji]}
         </div>
 
-        {/* Secondary trail */}
         <div
           className="absolute inset-0 text-2xl animate-pulse opacity-10 select-none blur-md"
           style={{ animationDelay: "0.3s" }}

@@ -110,9 +110,9 @@ export default function TransactionsPage() {
 
   const getTransactionColor = (transaction: Transaction) => {
     if (transaction.buyer === user?._id) {
-      return "text-red-600 dark:text-red-400"; // Outgoing
+      return "text-red-600 dark:text-red-400";
     } else {
-      return "text-green-600 dark:text-green-400"; // Incoming
+      return "text-green-600 dark:text-green-400";
     }
   };
 
@@ -147,7 +147,6 @@ export default function TransactionsPage() {
           </p>
         </div>
 
-        {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="glass-card">
             <CardContent className="p-6 text-center">

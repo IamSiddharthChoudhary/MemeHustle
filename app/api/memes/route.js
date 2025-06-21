@@ -106,7 +106,6 @@ export async function POST(req) {
       return NextResponse.json({ error: "Image is required" }, { status: 400 });
     }
 
-    // Validate image
     const allowedTypes = [
       "image/jpeg",
       "image/jpg",

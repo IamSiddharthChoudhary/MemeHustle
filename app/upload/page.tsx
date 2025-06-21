@@ -70,38 +70,37 @@ const aiTemplates = [
     id: "stonks",
     name: "Stonks Guy",
     description: "Classic stonks meme template",
-    imageUrl:
-      "https://a.pinatafarm.com/1858x1304/ff543bb12a/stonks-without-stonks.jpg",
+    imageUrl: "/template/stonks.jpeg",
   },
   {
     id: "drake",
     name: "Drake Pointing",
     description: "Drake approval/disapproval format",
-    imageUrl: "https://i.imgflip.com/30b1gx.jpg",
+    imageUrl: "/template/drake.jpg",
   },
   {
     id: "distracted",
     name: "Distracted Boyfriend",
     description: "Popular choice meme template",
-    imageUrl: "https://i.imgflip.com/1ur9b0.jpg",
+    imageUrl: "/template/distracted-boyfriend.jpg",
   },
   {
     id: "woman-cat",
     name: "Woman Yelling at Cat",
     description: "Confrontational meme format",
-    imageUrl: "https://i.imgflip.com/345v97.jpg",
+    imageUrl: "/template/woman-yelling-cat.jpg",
   },
   {
     id: "this-fine",
     name: "This is Fine",
     description: "Everything is fine dog meme",
-    imageUrl: "https://i.imgflip.com/26am.jpg",
+    imageUrl: "/template/this-is-fine.jpg",
   },
   {
     id: "expanding-brain",
     name: "Expanding Brain",
     description: "Intelligence levels meme",
-    imageUrl: "https://i.imgflip.com/1jwhww.jpg",
+    imageUrl: "/template/expanding-brain.jpg",
   },
 ];
 
@@ -231,14 +230,6 @@ export default function UploadPage() {
       if (data.success) {
         const { memeData } = data;
 
-        // Create a mock generated meme URL with the optimized text
-        const mockGeneratedUrl = `/placeholder.svg?height=400&width=400&text=${encodeURIComponent(
-          memeData.optimizedTopText + " " + memeData.optimizedBottomText
-        )}`;
-
-        // Handle the AI-generated image
-        await handleAIGeneratedImage(mockGeneratedUrl);
-
         // Auto-fill form with generated content
         setFormData((prev) => ({
           ...prev,
@@ -257,7 +248,10 @@ export default function UploadPage() {
           bottomText: memeData.optimizedBottomText,
         }));
 
-        toast.success("Meme generated successfully! 🎨");
+        toast.success("Meme content generated successfully! 🎨");
+        toast.success(
+          "Template image is ready for upload! You can now fill in the details and submit."
+        );
       } else {
         throw new Error(data.error);
       }
@@ -491,6 +485,34 @@ export default function UploadPage() {
     }
   };
 
+  // Add this new function after the existing functions
+  const handleTemplateSelection = async (template: (typeof aiTemplates)[0]) => {
+    setMemeGeneration((prev) => ({
+      ...prev,
+      selectedTemplate: template.id,
+    }));
+
+    try {
+      // Fetch the template image
+      const response = await fetch(template.imageUrl);
+      const blob = await response.blob();
+
+      // Create a File object from the template image
+      const file = new File([blob], `${template.id}-template.jpg`, {
+        type: blob.type || "image/jpeg",
+      });
+
+      // Set as uploaded file so it gets saved to database
+      setUploadedFile(file);
+      setPreviewUrl(template.imageUrl);
+
+      toast.success(`${template.name} template selected! 🎨`);
+    } catch (error) {
+      console.error("Failed to load template image:", error);
+      toast.error("Failed to load template image");
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -626,19 +648,15 @@ export default function UploadPage() {
                           ? "ring-2 ring-primary bg-primary/5"
                           : "hover:ring-2 hover:ring-primary/50"
                       }`}
-                      onClick={() =>
-                        setMemeGeneration((prev) => ({
-                          ...prev,
-                          selectedTemplate: template.id,
-                        }))
-                      }
+                      onClick={() => handleTemplateSelection(template)}
                     >
                       <CardContent className="p-4">
                         <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
                           <img
                             src={
                               template.imageUrl ||
-                              "/placeholder.svg?height=200&width=200"
+                              "/placeholder.svg?height=200&width=200" ||
+                              "/placeholder.svg"
                             }
                             alt={template.name}
                             className="w-full h-full object-cover rounded-lg"
@@ -1033,6 +1051,10 @@ export default function UploadPage() {
                 <Button type="submit" className="flex-1">
                   <Upload className="h-4 w-4 mr-2" />
                   Upload Meme
+                </Button>
+                <Button type="button" variant="outline">
+                  <Eye className="h-4 w-4 mr-2" />
+                  Preview
                 </Button>
               </div>
             </form>

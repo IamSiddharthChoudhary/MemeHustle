@@ -46,7 +46,6 @@ export async function POST(req) {
         throw new Error("No JSON found");
       }
     } catch (parseError) {
-      // Fallback data
       memeData = {
         optimizedTopText: topText || "When you realize",
         optimizedBottomText: bottomText || "It really do be like that",

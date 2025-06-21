@@ -45,7 +45,6 @@ export default function ExplorePage() {
     totalPages: 0,
   });
 
-  // Filter states
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
@@ -137,11 +136,9 @@ export default function ExplorePage() {
   };
 
   const handlePurchase = (memeId: string) => {
-    // Refresh user data and memes after purchase
-    fetchMemes();
-    if (user) {
-      // You might want to refresh user data here
-    }
+    // fetchMemes();
+    // if (user) {
+    // }
   };
 
   return (

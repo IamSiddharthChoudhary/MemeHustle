@@ -19,7 +19,6 @@ export async function POST(req) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Check if user already claimed bonus today
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -38,15 +37,12 @@ export async function POST(req) {
       );
     }
 
-    const bonusAmount = 10; // 10 coins daily bonus
-
-    // Award bonus coins
+    const bonusAmount = 10;
     await users.updateOne(
       { _id: new ObjectId(userId) },
       { $inc: { coins: bonusAmount } }
     );
 
-    // Record transaction
     await transactions.insertOne({
       buyer: userId,
       seller: "system",

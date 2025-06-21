@@ -39,7 +39,6 @@ export default function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Redirect if already logged in
   if (user) {
     router.push("/");
     return null;
